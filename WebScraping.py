@@ -1,4 +1,4 @@
-####login logout linkedin from python####
+####login logout linkedin jobs extraction from python####
 
 #to access web driver right here chrome driver
 from selenium import webdriver
@@ -26,6 +26,9 @@ website_title = driver.title
 email = ""
 
 password = ""
+
+
+print("**************************************************************")
 
 
 def login(email, password):
@@ -66,9 +69,26 @@ def extract_jobs_by_keywords(name):
     search_keywords = driver.find_element(By.XPATH, "//input[@name='keywords']")
     search_keywords.send_keys(name)
     search_keywords.send_keys(Keys.RETURN)
+    
+    #define an array that contains all names of jobs 
+    array_of_jobs_title = []
+            
+    #base-search-card__title
+    get_jobs_title = driver.find_elements_by_xpath("//*[@class='base-search-card__title']")
+    
+    for elem in get_jobs_title:
+        array_of_jobs_title.append(elem.text)
+
+    return array_of_jobs_title
 
 #to get jobs by keywords call of function : comment out this line below by removing #
-#extract_jobs_by_keywords("data scientist")
+array_of_jobs_title_from_extraction_keywords = extract_jobs_by_keywords("data scientist")
+
+print("the jobs titles of data filtered by keywords are listed below")
+
+print(array_of_jobs_title_from_extraction_keywords)
+
+print("**************************************************************")
 
 #function that extract jobs by location as parameter
 
@@ -77,11 +97,30 @@ def extract_jobs_by_country(country):
     search_by_location = driver.find_element(By.XPATH, "//input[@name='location']")
     search_by_location.send_keys(country)
     search_by_location.send_keys(Keys.RETURN)
+    
+    get_jobs_title = driver.find_elements_by_xpath("//*[@class='base-search-card__title']")
+
+    
+    #define an array that contains all names of jobs 
+    array_of_jobs_title = []
+    
+    for elem in get_jobs_title:
+        array_of_jobs_title.append(elem.text)
+
+    return array_of_jobs_title
 
 #to get jobs by country call of function : comment out this line below by removing #
-#extract_jobs_by_country("canada")
+array_of_jobs_title_from_extraction_location = extract_jobs_by_country("canada")
+
+print("the jobs titles of data filtered by location are listed below")
+
+print(array_of_jobs_title_from_extraction_location)
+
+print("**************************************************************")
+
 
 #time sleep to let the service available for 1 min
-time.sleep(60)
+time.sleep(25)
 
 driver.quit()
+    
